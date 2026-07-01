@@ -88,7 +88,7 @@ def preprocess_builder(feature_extractor, max_duration: float):
 
 def main(argv: list[str] | None = None) -> None:
     import torch
-    from datasets import Audio, load_dataset
+    from datasets import Audio, DatasetDict, load_dataset
     from sklearn.model_selection import train_test_split
     from transformers import (
         AutoFeatureExtractor,
@@ -110,10 +110,12 @@ def main(argv: list[str] | None = None) -> None:
         shuffle=True,
         stratify=full_train["genre"],
     )
-    gtzan = {
-        "train": full_train.select(train_indices),
-        "test": full_train.select(test_indices),
-    }
+    gtzan = DatasetDict(
+        {
+            "train": full_train.select(train_indices),
+            "test": full_train.select(test_indices),
+        }
+    )
 
     feature_extractor = AutoFeatureExtractor.from_pretrained(
         config.model_id,
