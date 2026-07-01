@@ -1,0 +1,11 @@
+git+https://github.com/huggingface/transformers
+datasets[audio]
+evaluate
+accelerate
+gradio
+torch
+torchaudio
+scikit-learn
+soundfile
+librosa
+ipywidgets
