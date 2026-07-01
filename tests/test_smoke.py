@@ -17,3 +17,12 @@ def test_train_parser_defaults():
     assert args.dataset_id == "marsyas/gtzan"
     assert args.max_duration == 30.0
     assert args.push_to_hub is False
+
+
+from src.app import build_parser as build_app_parser
+
+
+def test_app_parser_defaults():
+    args = build_app_parser().parse_args([])
+    assert args.model == "artifacts/distilhubert-gtzan"
+    assert args.share is False
