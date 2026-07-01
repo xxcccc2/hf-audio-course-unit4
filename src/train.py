@@ -96,7 +96,7 @@ def main(argv: list[str] | None = None) -> None:
     output_dir = Path(config.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    gtzan = load_dataset(config.dataset_id, "all")
+    gtzan = load_dataset(config.dataset_id, "all", trust_remote_code=True)
     gtzan = gtzan["train"].train_test_split(
         seed=config.seed,
         shuffle=True,
