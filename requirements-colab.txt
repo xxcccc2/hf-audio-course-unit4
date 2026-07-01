@@ -1,5 +1,5 @@
 git+https://github.com/huggingface/transformers
-datasets[audio]
+datasets[audio]<4
 evaluate
 accelerate
 gradio
