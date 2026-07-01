@@ -26,3 +26,8 @@ def test_app_parser_defaults():
     args = build_app_parser().parse_args([])
     assert args.model == "artifacts/distilhubert-gtzan"
     assert args.share is False
+
+
+def test_notebook_exists():
+    root = Path(__file__).resolve().parents[1]
+    assert (root / "notebooks" / "unit4_colab.ipynb").exists()
