@@ -89,6 +89,7 @@ def preprocess_builder(feature_extractor, max_duration: float):
 def main(argv: list[str] | None = None) -> None:
     import torch
     from datasets import Audio, load_dataset
+    from sklearn.model_selection import train_test_split
     from transformers import (
         AutoFeatureExtractor,
         AutoModelForAudioClassification,
@@ -100,13 +101,19 @@ def main(argv: list[str] | None = None) -> None:
     output_dir = Path(config.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    gtzan = load_dataset(config.dataset_id, "all", trust_remote_code=True)
-    gtzan = gtzan["train"].train_test_split(
-        seed=config.seed,
-        shuffle=True,
+    full_train = load_dataset(config.dataset_id, "all", trust_remote_code=True)["train"]
+    indices = list(range(len(full_train)))
+    train_indices, test_indices = train_test_split(
+        indices,
         test_size=config.test_size,
-        stratify_by_column="genre",
+        random_state=config.seed,
+        shuffle=True,
+        stratify=full_train["genre"],
     )
+    gtzan = {
+        "train": full_train.select(train_indices),
+        "test": full_train.select(test_indices),
+    }
 
     feature_extractor = AutoFeatureExtractor.from_pretrained(
         config.model_id,
