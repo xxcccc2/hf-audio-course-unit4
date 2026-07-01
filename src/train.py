@@ -18,6 +18,7 @@ class TrainConfig:
     gradient_accumulation_steps: int
     num_train_epochs: int
     learning_rate: float
+    warmup_ratio: float
     push_to_hub: bool
     hub_model_id: str | None
 
@@ -35,6 +36,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--gradient-accumulation-steps", type=int, default=2)
     parser.add_argument("--num-train-epochs", type=int, default=10)
     parser.add_argument("--learning-rate", type=float, default=3e-5)
+    parser.add_argument("--warmup-ratio", type=float, default=0.1)
     parser.add_argument("--push-to-hub", action="store_true")
     parser.add_argument("--hub-model-id", default=None)
     return parser
@@ -54,6 +56,7 @@ def parse_args(argv: list[str] | None = None) -> TrainConfig:
         gradient_accumulation_steps=args.gradient_accumulation_steps,
         num_train_epochs=args.num_train_epochs,
         learning_rate=args.learning_rate,
+        warmup_ratio=args.warmup_ratio,
         push_to_hub=args.push_to_hub,
         hub_model_id=args.hub_model_id,
     )
@@ -84,6 +87,7 @@ def preprocess_builder(feature_extractor, max_duration: float):
 
 
 def main(argv: list[str] | None = None) -> None:
+    import torch
     from datasets import Audio, load_dataset
     from transformers import (
         AutoFeatureExtractor,
@@ -101,6 +105,7 @@ def main(argv: list[str] | None = None) -> None:
         seed=config.seed,
         shuffle=True,
         test_size=config.test_size,
+        stratify_by_column="genre",
     )
 
     feature_extractor = AutoFeatureExtractor.from_pretrained(
@@ -142,11 +147,14 @@ def main(argv: list[str] | None = None) -> None:
         per_device_eval_batch_size=config.per_device_eval_batch_size,
         gradient_accumulation_steps=config.gradient_accumulation_steps,
         num_train_epochs=config.num_train_epochs,
-        warmup_ratio=0.1,
+        warmup_ratio=config.warmup_ratio,
         load_best_model_at_end=True,
         metric_for_best_model="accuracy",
+        greater_is_better=True,
+        save_total_limit=1,
         push_to_hub=False,
         report_to="none",
+        fp16=torch.cuda.is_available(),
     )
 
     trainer = Trainer(
