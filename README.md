@@ -18,13 +18,13 @@ This repository contains a Colab-first solution for Hugging Face Audio Course Un
 4. Enable a GPU runtime.
 5. Run the Unit 4 certificate-oriented recipe:
 
-`python src/train.py --model-id MIT/ast-finetuned-audioset-10-10-0.4593 --output-dir artifacts/ast-gtzan --per-device-train-batch-size 4 --per-device-eval-batch-size 4 --learning-rate 5e-5 --num-train-epochs 20 --seed 42`
+`python src/train.py --model-id MIT/ast-finetuned-audioset-10-10-0.4593 --output-dir artifacts/ast-gtzan --per-device-train-batch-size 2 --per-device-eval-batch-size 2 --gradient-accumulation-steps 4 --learning-rate 5e-5 --num-train-epochs 25 --seed 42`
 
 ## Optional Hub upload
 
 Authenticate in Colab and run:
 
-`python src/train.py --model-id MIT/ast-finetuned-audioset-10-10-0.4593 --output-dir artifacts/ast-gtzan --per-device-train-batch-size 4 --per-device-eval-batch-size 4 --learning-rate 5e-5 --num-train-epochs 20 --seed 42 --push-to-hub --hub-model-id your-username/ast-finetuned-gtzan`
+`python src/train.py --model-id MIT/ast-finetuned-audioset-10-10-0.4593 --output-dir artifacts/ast-gtzan --per-device-train-batch-size 2 --per-device-eval-batch-size 2 --gradient-accumulation-steps 4 --learning-rate 5e-5 --num-train-epochs 25 --seed 42 --push-to-hub --hub-model-id your-username/ast-finetuned-gtzan`
 
 ## Demo
 
