@@ -1,17 +1,20 @@
 # Manual Steps
 
-## Required user actions
+## Steps that require the user
 
-1. Open the notebook in Google Colab.
-2. Switch the runtime to GPU.
-3. If you want Hub upload, run `from huggingface_hub import notebook_login` and authenticate.
-4. Run the training command cells.
-5. Run the optional `--push-to-hub` command only after authentication.
+1. Publish the repository to a Git remote that Colab can access.
+2. Open the notebook in Google Colab.
+3. Replace the repository URL placeholder in the clone cell.
+4. Switch the runtime to GPU.
+5. If Hub upload is desired, authenticate with `notebook_login`.
+6. Run the training cell.
+7. Run the optional Hub upload command.
 
-## Agent-completed work
+## Steps completed by the agent
 
 - repository files
 - training script
 - demo script
 - notebook runner
 - smoke tests
+ - local verification
