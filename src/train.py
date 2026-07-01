@@ -144,6 +144,7 @@ def main(argv: list[str] | None = None) -> None:
         num_labels=len(labels),
         label2id=label2id,
         id2label=id2label,
+        ignore_mismatched_sizes=True,
     )
 
     training_args = TrainingArguments(
